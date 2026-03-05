@@ -1,6 +1,6 @@
 ﻿# Objektorienterad analys och design
 
-GitHub repo: `https://github.com/hassa/uppgift.Objektorienterad`
+GitHub repo: `https://github.com/hassan-jawdat/uppgift.Objektorienterad`
 
 ## 1. Kundscenario
 

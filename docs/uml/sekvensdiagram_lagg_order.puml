@@ -1,0 +1,36 @@
+﻿@startuml
+actor Kund
+participant "Web/API" as Api
+participant "PlaceOrderService" as App
+participant "IProductCatalog" as Catalog
+participant "IDiscountStrategy" as Discount
+participant "OrderFactory" as Factory
+participant "IOrderRepository" as Repo
+
+Kund -> Api: Bekrafta kop
+Api -> App: PlaceOrder(cmd)
+App -> Catalog: GetProducts(items)
+Catalog --> App: Product snapshots
+
+alt Lager OK
+  App -> Discount: Calculate(customerType, subtotal)
+  Discount --> App: discountAmount
+  App -> Factory: Create(customerId, items, discount)
+  Factory --> App: Order
+  App -> Catalog: ReserveAsync(reservations)
+  Catalog --> App: Reserved true/false
+
+  alt Reservation OK
+    App -> Repo: Save(order)
+    Repo --> App: saved
+    App --> Api: OrderPlaced(orderId)
+    Api --> Kund: Bekraftelse
+  else Reservation misslyckad
+    App --> Api: Error("OutOfStock")
+    Api --> Kund: Felmeddelande
+  end
+else Lager saknas
+  App --> Api: Error("OutOfStock")
+  Api --> Kund: Felmeddelande
+end
+@enduml

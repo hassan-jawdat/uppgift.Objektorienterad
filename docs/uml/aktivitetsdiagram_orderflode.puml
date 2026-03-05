@@ -1,0 +1,18 @@
+﻿@startuml
+start
+:Kund skickar "Bekrafta kop";
+:Validera orderdata;
+:Kontrollera lagersaldo;
+if (Finns alla varor i lager?) then (Ja)
+  :Berakna totalpris och rabatt;
+  :Skapa Order (Draft -> Placed);
+  :Reservera lager;
+  :Publicera event OrderPlaced;
+  :Skicka orderbekraftelse;
+  stop
+else (Nej)
+  :Avbryt order;
+  :Skicka felmeddelande om saknat lager;
+  stop
+endif
+@enduml
